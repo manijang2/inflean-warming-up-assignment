@@ -31,24 +31,20 @@ public class FixActor implements Actor {
                     boolean lockerSelection = askLockerUsage(lockerPass);
                     if (lockerSelection) {
                         selectedPass.useLockerPass(lockerPass);
-                        outputHandler.showPassOrderSummary(selectedPass, null);
-                    } else {
-                        outputHandler.showPassOrderSummary(selectedPass, null);
                     }
+                    outputHandler.showPassOrderSummary(selectedPass);
                 }
         );
     }
 
     private List<StudyCafePass> getStudyCafePasses() {
         StudyCafePassList passList = studyCafeFileHandler.readStudyCafePasses();
-        List<StudyCafePass> fixedPasses = passList.extractCafePasses(StudyCafePassType.FIXED);
-        return fixedPasses;
+        return passList.extractCafePasses(StudyCafePassType.FIXED);
     }
 
     private boolean askLockerUsage(StudyCafeLockerPass lockerPass) {
         outputHandler.showAskLockerPass(lockerPass);
-        boolean lockerSelection = inputHandler.getLockerSelection();
-        return lockerSelection;
+        return inputHandler.getLockerSelection();
     }
 
     private StudyCafePass askFixStudyCafePass(List<StudyCafePass> fixedPasses) {

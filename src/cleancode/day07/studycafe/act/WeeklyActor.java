@@ -11,9 +11,9 @@ import java.util.List;
 
 public class WeeklyActor implements Actor {
 
-    private InputHandler inputHandler;
-    private OutputHandler outputHandler;
-    private StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
+    private final InputHandler inputHandler;
+    private final OutputHandler outputHandler;
+    private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
 
     public WeeklyActor(InputHandler inputHandler, OutputHandler outputHandler) {
         this.inputHandler = inputHandler;
@@ -28,14 +28,13 @@ public class WeeklyActor implements Actor {
     }
 
     private void showPass(StudyCafePass selectedPass) {
-        outputHandler.showPassOrderSummary(selectedPass, null);
+        outputHandler.showPassOrderSummary(selectedPass);
     }
 
     private StudyCafePass askWeeklyPasses(StudyCafePassList studyCafePassList) {
         List<StudyCafePass> weeklyPasses = studyCafePassList.extractCafePasses(StudyCafePassType.WEEKLY);
         outputHandler.showPassListForSelection(weeklyPasses);
-        StudyCafePass selectedPass = inputHandler.getSelectPass(weeklyPasses);
-        return selectedPass;
+        return inputHandler.getSelectPass(weeklyPasses);
     }
 
     private StudyCafePassList getWeeklyPasses() {

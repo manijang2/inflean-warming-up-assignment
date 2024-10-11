@@ -11,9 +11,9 @@ import java.util.List;
 
 public class HourActor implements Actor {
 
-    private InputHandler inputHandler;
-    private OutputHandler outputHandler;
-    private StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
+    private final InputHandler inputHandler;
+    private final OutputHandler outputHandler;
+    private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
 
     public HourActor(InputHandler inputHandler, OutputHandler outputHandler) {
         this.inputHandler = inputHandler;
@@ -28,18 +28,16 @@ public class HourActor implements Actor {
     }
 
     private void showPass(StudyCafePass selectedPass) {
-        outputHandler.showPassOrderSummary(selectedPass, null);
+        outputHandler.showPassOrderSummary(selectedPass);
     }
 
     private StudyCafePass askHourlyPass(List<StudyCafePass> hourlyPasses) {
         outputHandler.showPassListForSelection(hourlyPasses);
-        StudyCafePass selectedPass = inputHandler.getSelectPass(hourlyPasses);
-        return selectedPass;
+        return inputHandler.getSelectPass(hourlyPasses);
     }
 
     private List<StudyCafePass> getStudyCafePasses() {
         StudyCafePassList studyCafePassList = studyCafeFileHandler.readStudyCafePasses();
-        List<StudyCafePass> hourlyPasses = studyCafePassList.extractCafePasses(StudyCafePassType.HOURLY);
-        return hourlyPasses;
+        return studyCafePassList.extractCafePasses(StudyCafePassType.HOURLY);
     }
 }
