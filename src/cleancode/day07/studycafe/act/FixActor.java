@@ -20,23 +20,39 @@ public class FixActor implements Actor {
 
     @Override
     public void act() {
-        StudyCafePassList passList = studyCafeFileHandler.readStudyCafePasses();
-        List<StudyCafePass> fixedPasses = passList.extractCafePasses(StudyCafePassType.FIXED);
 
-        outputHandler.showPassListForSelection(fixedPasses);
-        StudyCafePass selectedPass = inputHandler.getSelectPass(fixedPasses);
+        List<StudyCafePass> fixedPasses = getStudyCafePasses();
 
-        StudyCafeLockerPassList lockerPassList = studyCafeFileHandler.readLockerPasses();
-        lockerPassList.extract(selectedPass.getPassType(), selectedPass.getDuration()).ifPresent(
+        StudyCafePass selectedPass = askFixStudyCafePass(fixedPasses);
+
+        StudyCafeLockerPassList lockerPasses = studyCafeFileHandler.readLockerPasses();
+        lockerPasses.get(selectedPass.getPassType(), selectedPass.getDuration()).ifPresent(
                 lockerPass -> {
-                    outputHandler.askLockerPass(lockerPass);
-                    boolean lockerSelection = inputHandler.getLockerSelection();
+                    boolean lockerSelection = askLockerUsage(lockerPass);
                     if (lockerSelection) {
-                        outputHandler.showPassOrderSummary(selectedPass, lockerPass);
+                        selectedPass.useLockerPass(lockerPass);
+                        outputHandler.showPassOrderSummary(selectedPass, null);
                     } else {
                         outputHandler.showPassOrderSummary(selectedPass, null);
                     }
                 }
         );
+    }
+
+    private List<StudyCafePass> getStudyCafePasses() {
+        StudyCafePassList passList = studyCafeFileHandler.readStudyCafePasses();
+        List<StudyCafePass> fixedPasses = passList.extractCafePasses(StudyCafePassType.FIXED);
+        return fixedPasses;
+    }
+
+    private boolean askLockerUsage(StudyCafeLockerPass lockerPass) {
+        outputHandler.showAskLockerPass(lockerPass);
+        boolean lockerSelection = inputHandler.getLockerSelection();
+        return lockerSelection;
+    }
+
+    private StudyCafePass askFixStudyCafePass(List<StudyCafePass> fixedPasses) {
+        outputHandler.showPassListForSelection(fixedPasses);
+        return inputHandler.getSelectPass(fixedPasses);
     }
 }

@@ -22,10 +22,24 @@ public class HourActor implements Actor {
 
     @Override
     public void act() {
-        StudyCafePassList studyCafePassList = studyCafeFileHandler.readStudyCafePasses();
-        List<StudyCafePass> hourlyPasses = studyCafePassList.extractCafePasses(StudyCafePassType.HOURLY);
+        List<StudyCafePass> hourlyPasses = getStudyCafePasses();
+        StudyCafePass selectedPass = askHourlyPass(hourlyPasses);
+        showPass(selectedPass);
+    }
+
+    private void showPass(StudyCafePass selectedPass) {
+        outputHandler.showPassOrderSummary(selectedPass, null);
+    }
+
+    private StudyCafePass askHourlyPass(List<StudyCafePass> hourlyPasses) {
         outputHandler.showPassListForSelection(hourlyPasses);
         StudyCafePass selectedPass = inputHandler.getSelectPass(hourlyPasses);
-        outputHandler.showPassOrderSummary(selectedPass, null);
+        return selectedPass;
+    }
+
+    private List<StudyCafePass> getStudyCafePasses() {
+        StudyCafePassList studyCafePassList = studyCafeFileHandler.readStudyCafePasses();
+        List<StudyCafePass> hourlyPasses = studyCafePassList.extractCafePasses(StudyCafePassType.HOURLY);
+        return hourlyPasses;
     }
 }

@@ -7,6 +7,8 @@ public class StudyCafePass {
     private final int price;
     private final double discountRate;
 
+    private StudyCafeLockerPass lockerPass;
+
     private StudyCafePass(StudyCafePassType passType, int duration, int price, double discountRate) {
         this.passType = passType;
         this.duration = duration;
@@ -14,8 +16,12 @@ public class StudyCafePass {
         this.discountRate = discountRate;
     }
 
-    public static StudyCafePass of(StudyCafePassType passType, int duration, int price, double discountRate) {
+    public static StudyCafePass create(StudyCafePassType passType, int duration, int price, double discountRate) {
         return new StudyCafePass(passType, duration, price, discountRate);
+    }
+
+    public void useLockerPass(StudyCafeLockerPass lockerPass) {
+        this.lockerPass = lockerPass;
     }
 
     public StudyCafePassType getPassType() {
@@ -38,4 +44,22 @@ public class StudyCafePass {
         return passType.toDisplayString(duration, price);
     }
 
+    public boolean isUseLockerPass() {
+        return lockerPass != null;
+    }
+
+    public String lockerDisplay() {
+        if (isUseLockerPass()) {
+            return lockerPass.display();
+        }
+        throw new IllegalStateException("락커의 정보가 존재하지 않습니다.");
+    }
+
+    public int discountPrice() {
+        return (int) (getPrice() * getDiscountRate());
+    }
+
+    public int getTotalPrice() {
+        return getPrice() - discountPrice() + (lockerPass != null ? lockerPass.getPrice() : 0);
+    }
 }

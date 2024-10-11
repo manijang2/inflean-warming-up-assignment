@@ -20,7 +20,7 @@ public class StudyCafeLockerPassList {
         }
     }
 
-    public Optional<StudyCafeLockerPass> extract(StudyCafePassType type, int duration) {
+    public Optional<StudyCafeLockerPass> get(StudyCafePassType type, int duration) {
         return list.stream()
                 .filter(option ->
                         option.getType() == type && option.getDuration() == duration

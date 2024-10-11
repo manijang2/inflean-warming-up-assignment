@@ -22,11 +22,25 @@ public class WeeklyActor implements Actor {
 
     @Override
     public void act() {
-        StudyCafePassList studyCafePassList = studyCafeFileHandler.readStudyCafePasses();
-        studyCafePassList.extractCafePasses(StudyCafePassType.WEEKLY);
+        StudyCafePassList studyCafePassList = getWeeklyPasses();
+        StudyCafePass selectedPass = askWeeklyPasses(studyCafePassList);
+        showPass(selectedPass);
+    }
+
+    private void showPass(StudyCafePass selectedPass) {
+        outputHandler.showPassOrderSummary(selectedPass, null);
+    }
+
+    private StudyCafePass askWeeklyPasses(StudyCafePassList studyCafePassList) {
         List<StudyCafePass> weeklyPasses = studyCafePassList.extractCafePasses(StudyCafePassType.WEEKLY);
         outputHandler.showPassListForSelection(weeklyPasses);
         StudyCafePass selectedPass = inputHandler.getSelectPass(weeklyPasses);
-        outputHandler.showPassOrderSummary(selectedPass, null);
+        return selectedPass;
+    }
+
+    private StudyCafePassList getWeeklyPasses() {
+        StudyCafePassList studyCafePassList = studyCafeFileHandler.readStudyCafePasses();
+        studyCafePassList.extractCafePasses(StudyCafePassType.WEEKLY);
+        return studyCafePassList;
     }
 }

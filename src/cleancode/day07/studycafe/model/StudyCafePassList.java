@@ -16,7 +16,7 @@ public class StudyCafePassList {
             int price = Integer.parseInt(values[2]);
             double discountRate = Double.parseDouble(values[3]);
 
-            StudyCafePass studyCafePass = StudyCafePass.of(studyCafePassType, duration, price, discountRate);
+            StudyCafePass studyCafePass = StudyCafePass.create(studyCafePassType, duration, price, discountRate);
             list.add(studyCafePass);
         }
     }
@@ -25,5 +25,13 @@ public class StudyCafePassList {
         return list.stream()
                 .filter(studyCafePass -> studyCafePass.getPassType() == type)
                 .toList();
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    public StudyCafePass get(int index) {
+        return list.get(index);
     }
 }
